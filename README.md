@@ -9,6 +9,9 @@
 * [Generic Project Box](https://amzn.to/2L0KvnS) (another affiliate link.  Could accomplish the same with a 3d printed version)
 
 ## Connections
+* Button **OK** <-> **D2** Arduino
+* Button **Left** <-> **D7** Arduino
+* Button **Right** <-> **D3** Arduino
 * LED **Data** <-> **D6** Arduino
 * RTC **SDA** <-> **A4** Arduino
 * RTC **SCL** <-> **A5** Arduino
