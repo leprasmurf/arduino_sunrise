@@ -549,10 +549,10 @@ void checkMinute(byte x, byte y) {
       blank old value
       write new value
  */
-void checkSeconds(byte x, byte y) {
-  if(now_last.seconds() != now_now.seconds()) {
-    tftDrawInfo(x, y, now_last.seconds(), 'M', true); // Blank seconds - last
-    tftDrawInfo(x, y, now_now.seconds(), 'M', false); // Draw seconds - current
+void checkSecond(byte x, byte y) {
+  if(now_last.second() != now_now.second()) {
+    tftDrawInfo(x, y, now_last.second(), 'M', true); // Blank second - last
+    tftDrawInfo(x, y, now_now.second(), 'M', false); // Draw second - current
   }
 }
 
@@ -638,7 +638,7 @@ void updateLcd() {
   tft.text(":", x, y);
 
   x = 89;
-  checkSeconds(x, y);
+  checkSecond(x, y);
   
   tft.setTextSize(2);
   x = 130;
