@@ -612,8 +612,8 @@ void checkDoW(byte x, byte y) {
     // blank DoW line
     // tft.stroke(clock_text_color.r, clock_text_color.g, clock_text_color.b);
 
-    tftDrawInfo(x, y, String(daysOfTheWeek[now_last.dayOfTheWeek()], 'u', true); // Blank DoW
-    tftDrawInfo(x, y, String(daysOfTheWeek[now_now.dayOfTheWeek()], 'u', true); // Draw DoW
+    tftDrawInfo(x, y, String(daysOfTheWeek[now_last.dayOfTheWeek()]), 'u', true); // Blank DoW
+    tftDrawInfo(x, y, String(daysOfTheWeek[now_now.dayOfTheWeek()]), 'u', true); // Draw DoW
   }
 }
 
