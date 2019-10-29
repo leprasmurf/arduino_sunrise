@@ -668,7 +668,7 @@ void updateLcd() {
 
   // Current Day
   x = 108;
-  checkDay(x, y)
+  checkDay(x, y);
 
   /****************************** line 3 ******************************/
   tft.setTextSize(1);
