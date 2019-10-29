@@ -484,7 +484,6 @@ void tftDrawInfo(byte x, byte y, String value, char setting, bool blank) {
     tft.stroke(bg_color.r, bg_color.g, bg_color.b);
   }
 
-
   // create an array the length of the string to write + 1 for null terminate
   char _value_array[value.length() + 1];
 
@@ -509,62 +508,142 @@ void tftDrawInfo(byte x, byte y, int value, char setting, bool blank) {
   tftDrawInfo(x, y, tmp_str, setting, blank);
 }
 
-// Update information displayed on LCD
-void updateLcd() {
-  byte x = 0;
-  byte y = 0;
-
-  /****************************** line 1 ******************************/
-  tft.setTextSize(3);
-
+/* Change hour
+      Blank last hour from screen
+      Write new value
+*/
+void checkHour(byte x, byte y) {
   if (now_last.hour() != now_now.hour()) {
+    // Get the last hour entry
     tmp_byte = now_last.hour() % 12;
     if (tmp_byte == 0) {
       tmp_byte = 12;
     }
-    tftDrawInfo(x, y, tmp_byte, 'H', true); // Blank hours - current
-  }
-  tmp_byte = now_now.hour() % 12;
-  if (tmp_byte == 0) {
-    tmp_byte = 12;
-  }
 
-  tftDrawInfo(x, y, tmp_byte, 'H', false); // Draw hours - current
+    // Blank the last hour entry from the screen
+    tftDrawInfo(x, y, tmp_byte, 'H', true); // Blank hours - last
 
-  x = 30;
+    // Get the current hour entry
+    tmp_byte = now_now.hour() % 12;
+    if (tmp_byte == 0) {
+      tmp_byte = 12;
+    }
+
+    // Draw the current hour
+    tftDrawInfo(x, y, tmp_byte, 'H', false); // Draw hours - current
+  }
+}
+
+/* Change minute
+      blank old value
+      write new value
+ */
+void checkMinute(byte x, byte y) {
+  if(now_last.minute() != now_now.minute()) {
+    tftDrawInfo(x, y, now_last.minute(), 'M', true); // Blank minutes - last
+    tftDrawInfo(x, y, now_now.minute(), 'M', false); // Draw minutes - current
+  }
+}
+
+/* Change seconds
+      blank old value
+      write new value
+ */
+void checkSeconds(byte x, byte y) {
+  if(now_last.seconds() != now_now.seconds()) {
+    tftDrawInfo(x, y, now_last.seconds(), 'M', true); // Blank seconds - last
+    tftDrawInfo(x, y, now_now.seconds(), 'M', false); // Draw seconds - current
+  }
+}
+
+/* Change AM/PM
+      blank old value
+      write new value
+*/
+void checkAmPm(byte x, byte y) {
+  if ((now_now.hour() == 12) && (now_last.hour() == 11)) {
+    tftDrawInfo(x, y, "AM", 'p', true);
+    tftDrawInfo(x, y, "PM", 'p', false);
+  } else if ((now_now.hour() == 0) && (now_last.hour() == 23)) {
+    tftDrawInfo(x, y, "PM", 'p', true);
+    tftDrawInfo(x, y, "AM", 'p', false);
+  }
+}
+
+/* Change Year
+      Blank old year
+      Write new year
+ */
+void checkYear(byte x, byte y) {
+  if (now_last.year() != now_now.year()) {
+    tftDrawInfo(x, y, now_last.year(), 'Y', true); // Blank year
+    tftDrawInfo(x, y, now_now.year(), 'Y', false); // Draw year
+  }
+}
+
+/* Change Month
+      Blank old month
+      Write new month
+ */
+void checkMonth(byte x, byte y) {
+  if (now_last.month() != now_now.month()) {
+    tftDrawInfo(x, y, now_last.month(), 'm', true); // Blank month
+    tftDrawInfo(x, y, now_now.month(), 'm', false); // Draw month
+  }
+}
+
+/* Change Day
+      Blank old day
+      Write new day
+ */
+void checkDay(byte x, byte y) {
+  if (now_last.day() != now_now.day()) {
+    tftDrawInfo(x, y, now_last.day(), 'd', true); // Blank day
+    tftDrawInfo(x, y, now_now.day(), 'd', false); // Draw day
+  }
+}
+
+/* Change Day of the Week
+      Blank old day of the week
+      Write new day of the week
+ */
+void checkDoW(byte x, byte y) {
+  if (now_last.dayOfTheWeek() != now_now.dayOfTheWeek()) {
+    // blank DoW line
+    // tft.stroke(clock_text_color.r, clock_text_color.g, clock_text_color.b);
+
+    tftDrawInfo(x, y, String(daysOfTheWeek[now_last.dayOfTheWeek()], 'u', true); // Blank DoW
+    tftDrawInfo(x, y, String(daysOfTheWeek[now_now.dayOfTheWeek()], 'u', true); // Draw DoW
+  }
+}
+
+// Update information displayed on LCD
+void updateLcd() {
+  byte x = 5;
+  byte y = 0;
+
+  /****************************** line 1 ******************************/
+  tft.setTextSize(3);
+  checkHour(x, y);
+
+  x = 35;
   tft.stroke(punctuation_color.r, punctuation_color.g, punctuation_color.b);
   tft.text(":", x, y);
 
-  x = 42;
-  if (now_last.minute() != now_now.minute()) {
-    tftDrawInfo(x, y, now_last.minute(), 'M', true); // Blank minutes - current
-  }
-  tftDrawInfo(x, y, now_now.minute(), 'M', false); // Draw minutes - current
-
-  x = 72;
+  x = 47;
+  checkMinute(x, y);
+  
+  x = 77;
   tft.stroke(punctuation_color.r, punctuation_color.g, punctuation_color.b);
   tft.text(":", x, y);
 
-  x = 84;
-  if (now_last.second() != now_now.second()) {
-    tftDrawInfo(x, y, now_last.second(), 'S', true); // Blank seconds - current
-  }
-  tftDrawInfo(x, y, now_now.second(), 'S', false); // Draw seconds - current
-
+  x = 89;
+  checkSeconds(x, y);
+  
   tft.setTextSize(2);
-  x = 125;
-  // AM / PM
-  if (now_now.hour() >= 12) { // PM
-    if (now_last.hour() < 12) { // Blank AM
-      tftDrawInfo(x, y, "AM", 'p', true);
-    }
-    tftDrawInfo(x, y, "PM", 'p', false);// Draw PM
-  } else { // AM
-    if (now_last.hour() >= 12) { // Blank PM
-      tftDrawInfo(x, y, "PM", 'p', true);
-    }
-    tftDrawInfo(x, y, "AM", 'p', false);// Draw AM
-  }
+  x = 130;
+  y = 5;
+  checkAmPm(x, y);
 
   /****************************** line 2 ******************************/
   tft.setTextSize(2);
@@ -572,10 +651,8 @@ void updateLcd() {
   // Current Year
   x = 10;
   y = 35;
-  if (now_last.year() != now_now.year()) {
-    tftDrawInfo(x, y, now_now.year(), 'Y', true); // Blank year
-  }
-  tftDrawInfo(x, y, now_now.year(), 'Y', false); // Draw year
+  checkYear(x, y);
+
 
   x = 58;
   tft.stroke(punctuation_color.r, punctuation_color.g, punctuation_color.b);
@@ -583,31 +660,22 @@ void updateLcd() {
 
   // Current Month
   x = 70;
-  if (now_last.month() != now_now.month()) {
-    tftDrawInfo(x, y, now_now.month(), 'm', true); // Blank month
-  }
-  tftDrawInfo(x, y, now_now.month(), 'm', false); // Draw month
-
+  checkMonth(x, y);
+  
   x = 95;
   tft.stroke(punctuation_color.r, punctuation_color.g, punctuation_color.b);
   tft.text("/", x, y);
 
   // Current Day
   x = 108;
-  if (now_last.day() != now_now.day()) {
-    tftDrawInfo(x, y, now_now.day(), 'd', true); // Blank day
-  }
-  tftDrawInfo(x, y, now_now.day(), 'd', false); // Draw day
+  checkDay(x, y)
 
   /****************************** line 3 ******************************/
   tft.setTextSize(1);
   // Current Day of the Week
   x = 50;
   y = 60;
-  if (now_last.dayOfTheWeek() != now_now.dayOfTheWeek()) {
-    tftDrawInfo(x, y, String(daysOfTheWeek[now_last.dayOfTheWeek()]), 'u', true); // Blank DoW
-  }
-  tftDrawInfo(x, y, String(daysOfTheWeek[now_now.dayOfTheWeek()]), 'u', false); // Draw DoW
+  checkDoW(x, y);
 
   /****************************** line 4 ******************************/
   tft.setTextSize(1);
