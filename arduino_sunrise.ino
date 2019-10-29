@@ -2,7 +2,7 @@
    By Tim
    Latest update: July 9, 2018
 */
-#include "clock.h"
+#include "arduino_sunrise.h"
 
 /* global functions
 */
