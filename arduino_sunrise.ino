@@ -608,13 +608,18 @@ void checkDay(byte x, byte y) {
       Write new day of the week
  */
 void checkDoW(byte x, byte y) {
-  if (now_last.dayOfTheWeek() != now_now.dayOfTheWeek()) {
-    // blank DoW line
-    // tft.stroke(clock_text_color.r, clock_text_color.g, clock_text_color.b);
-
-    tftDrawInfo(x, y, String(daysOfTheWeek[now_last.dayOfTheWeek()]), 'u', true); // Blank DoW
-    tftDrawInfo(x, y, String(daysOfTheWeek[now_now.dayOfTheWeek()]), 'u', true); // Draw DoW
+  for (int i = 0; i < 7; i++) {
+    tftDrawInfo(x, y, String(daysOfTheWeek[i][0]), 'u', false);
+    x += 5;
   }
+
+  // if (now_last.dayOfTheWeek() != now_now.dayOfTheWeek()) {
+  //   // blank DoW line
+  //   // tft.stroke(clock_text_color.r, clock_text_color.g, clock_text_color.b);
+
+  //   tftDrawInfo(x, y, String(daysOfTheWeek[now_last.dayOfTheWeek()]), 'u', true); // Blank DoW
+  //   tftDrawInfo(x, y, String(daysOfTheWeek[now_now.dayOfTheWeek()]), 'u', false); // Draw DoW
+  // }
 }
 
 // Update information displayed on LCD
