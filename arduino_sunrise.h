@@ -95,7 +95,6 @@ DateTime now_now;
 */
 #define SETTINGS 11
 char setting_entries_dict[SETTINGS] = {
-    // 'H', 'M', 'S', 'p', 'Y', 'm', 'd', 'u', // Current DateTime
     'H', 'M', 'S', 'p', 'Y', 'm', 'd', 'u', // Current DateTime
     'I', 'N', 'q',                          // Next Sunrise
 };
@@ -299,7 +298,6 @@ byte buttonPress(byte button)
         {
             tft.background(bg_color.r, bg_color.g, bg_color.b);
             ret_val = 2;
-            break;
         }
         // short press
         else
@@ -857,10 +855,6 @@ void drawNextSunrise(byte x, byte y)
         {
             tftDrawInfo(x, y, "AM", 'q', false);
         }
-
-        // 23,400 == 6:30 == 6 * 3600 + 30 * 60
-        // 23,400 / 3600 == 6.5
-        // 23,400 - (6 * 3600) / 60 == 30
 
         return;
     }
